@@ -33,13 +33,22 @@ from functools import lru_cache
 
 class Solution:
     def numRollsToTarget(self, n: int, k: int, target: int) -> int:
-        @lru_cache(None)
-        def dfs(n, target):
+        @lru_cache(None) # same as @cache in Python >= 3.9
+        def dfs(n, target) -> int:
+            # the path(permutation) will be valid if and only if the sum of n dice rolls equals to target (return 1)
+            # otherwise, it's invalid (return 0)
             if n == 0:
                 return 1 if target == 0 else 0
             if target < 0:
                 return 0
-            
-            return sum([dfs(n-1, target-i) for i in range(1, k+1)])
+
+            # sum all possible dice rolls (1~k) for round n 
+            # (backtracking) =>
+            # sum all possible dice rolls (1~k) for round n-1
+            # ...
+            # sum all possible dice rolls (1~k) for round 1 
+            # (target should be in range of (1~k) to be valid. Otherwise, we can't solve it in 1 round) =>
+            # sum all possible dice rolls (1~k) for round 0
+            return sum(dfs(n-1, target-i) for i in range(1, k+1))
         
         return dfs(n, target) % int(1e9 + 7)
