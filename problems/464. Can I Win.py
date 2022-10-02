@@ -1,3 +1,4 @@
+# link: https://leetcode.com/problems/can-i-win/
 from functools import cache
 
 class Solution:
