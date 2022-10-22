@@ -13,6 +13,23 @@ class Solution:
         length = max(length, len(viewed))
         return length
 
+    # using HashMap to fast search and record index
+    # def lengthOfLongestSubstring(self, s: str) -> int:
+    #     seenIndex = {}
+    #     start = maxLength =  0
+    #     for i, c in enumerate(s):
+    #         if c not in seenIndex or seenIndex[c] < start: 
+    #             seenIndex[c] = i
+    #         else:
+    #             maxLength = max(maxLength, i-start)
+    #             start = seenIndex[c] + 1
+    #             seenIndex[c] = i
+    #             # the char index before i will not be erased,
+    #             # so we have to double check at the if-statement above
+                
+    #     maxLength = max(maxLength, len(s)-start)
+    #     return maxLength
+
     # using set
     # def lengthOfLongestSubstring(self, s: str) -> int:
     #    seen = set()
