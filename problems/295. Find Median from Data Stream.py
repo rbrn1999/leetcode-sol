@@ -4,27 +4,30 @@ import heapq
 class MedianFinder:
 
     def __init__(self):
-        self.small, self.large = [], []
+        self.maxHeap = [] # smaller half of nums
+        self.minHeap = [] # larger half of nums
 
     def addNum(self, num: int) -> None:
-        heapq.heappush(self.small, -1*num)
-        if (self.small and self.large) and (-1 * self.small[0]) > self.large[0]:
-            heapq.heappush(self.large, -1 * heapq.heappop(self.small))
-            
-        if len(self.small) > len(self.large) + 1:
-            heapq.heappush(self.large, -1 * heapq.heappop(self.small))
-            
-        if len(self.large) > len(self.small) + 1:
-            heapq.heappush(self.small, -1 * heapq.heappop(self.large))
+        if self.maxHeap and -self.maxHeap[0] > num:
+            heapq.heappush(self.maxHeap, -num)
+        else:
+            heapq.heappush(self.minHeap, num)
+
+        # balance size of two heaps
+        if len(self.minHeap) > len(self.maxHeap) + 1:
+            heapq.heappush(self.maxHeap, -heapq.heappop(self.minHeap))
+        elif len(self.maxHeap) > len(self.minHeap) + 1:
+            heapq.heappush(self.minHeap, -heapq.heappop(self.maxHeap))
 
     def findMedian(self) -> float:
-        if len(self.small) > len(self.large):
-            return -1 * self.small[0]
-        if len(self.large) > len(self.small):
-            return self.large[0]
-        
-        return (-1 * self.small[0] + self.large[0]) / 2
+        if len(self.minHeap) > len(self.maxHeap):
+            return self.minHeap[0]
+        elif len(self.minHeap) < len(self.maxHeap):
+            return -self.maxHeap[0]
+        else:
+            return (-self.maxHeap[0] + self.minHeap[0]) / 2
 
+# binary search solution
 # import bisect
 # class MedianFinder:
 
