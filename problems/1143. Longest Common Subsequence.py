@@ -14,14 +14,37 @@ class Solution:
                 return 0
             if (i, j) in memo:
                 return memo[(i, j)]
-            
+
             length = 0
             if text1[i] == text2[j]:
                 length = helper(i-1, j-1) + 1
             else:
                 length = max(helper(i-1, j), helper(i, j-1)) # two different routes
-                
+
             memo[(i, j)] = length
             return length
-        
+
         return helper(m-1, n-1)
+
+
+# bottom-up recursion solution
+class Solution:
+    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+        m, n = len(text1), len(text2)
+        memo = {}
+        def dfs(i, j):
+            if i < 0 or i >= m or j < 0 or j >= n:
+                return 0
+            if (i, j) in memo:
+                return memo[(i, j)]
+
+            length = 0
+            if text1[i] == text2[j]:
+                length = 1 + dfs(i+1, j+1)
+            else:
+                length = max(dfs(i+1, j), dfs(i, j+1))
+
+            memo[(i, j)] = length
+            return length
+
+        return dfs(0, 0)
