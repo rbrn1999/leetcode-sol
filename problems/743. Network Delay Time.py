@@ -12,18 +12,21 @@ class Solution:
             edges[source].append((weight, target))
 
         visited = set()
-        delay = [0] + [float('inf')] * n
+        total_delay = 0
         heap = [(0, k)]
         
         while heap:
-            cost, node = heappop(heap)
-            if cost < delay[node]:
-                delay[node] = cost
-                for weight, target in edges[node]:
-                    heappush(heap, (delay[node] + weight, target))
+            weight, node = heappop(heap)
+            if node in visited:
+                continue
+            else:
+                visited.add(node)
+
+            total_delay = max(total_delay, weight)
+            for edge_weight, target in edges[node]:
+                heappush(heap, (weight + edge_weight, target))
         
-        max_delay = max(delay)
-        return max_delay if max_delay < float('inf') else -1
+        return total_delay if len(visited) == n else -1
 
 
 class Solution:
