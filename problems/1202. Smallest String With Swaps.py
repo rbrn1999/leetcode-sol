@@ -1,7 +1,48 @@
 # link: https://leetcode.com/problems/smallest-string-with-swaps/
 
-from collections import defaultdict
 
+# 2022/12/24
+class Solution:
+    def smallestStringWithSwaps(self, s: str, pairs: list[list[int]]) -> str:
+        n = len(s)
+        parents = [i for i in range(n)]
+        rank = [1] * n
+        result = [c for c in s]
+        
+        def find(node):
+            if parents[node] == node:
+                return node
+            parents[node] = find(parents[node])
+            return parents[node]
+        
+        def union(n1, n2):
+            p1, p2 = find(n1), find(n2)
+            if p1 == p2:
+                return 0
+            if rank[p1] > rank[p2]:
+                parents[p2] = p1
+                rank[p1] += rank[p2]
+            else:
+                parents[p1] = p2
+                rank[p2] += rank[p1]
+            return 1
+        
+        for n1, n2 in pairs:
+            union(n1, n2)
+        
+        groups = defaultdict(list)
+        for i in range(n):
+            groups[find(i)].append(i)
+        
+        for group in groups.values():
+            inds = sorted(group, key=lambda i: s[i])
+            for i in range(len(group)):
+                result[group[i]] = s[inds[i]]
+        
+        return ''.join(result)
+
+# 2022/04/27
+from collections import defaultdict
 
 class UnionFind:
     def __init__(self, size):
