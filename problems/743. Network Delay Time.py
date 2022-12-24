@@ -2,8 +2,32 @@
 
 from collections import defaultdict
 from heapq import heappop, heappush
+
+# 2022/12/24
+# shorter solution
 class Solution:
-    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+    def networkDelayTime(self, times: list[list[int]], n: int, k: int) -> int:
+        edges = defaultdict(list)
+        for source, target, weight in times:
+            edges[source].append((weight, target))
+
+        visited = set()
+        delay = [0] + [float('inf')] * n
+        heap = [(0, k)]
+        
+        while heap:
+            cost, node = heappop(heap)
+            if cost < delay[node]:
+                delay[node] = cost
+                for weight, target in edges[node]:
+                    heappush(heap, (delay[node] + weight, target))
+        
+        max_delay = max(delay)
+        return max_delay if max_delay < float('inf') else -1
+
+
+class Solution:
+    def networkDelayTime(self, times: list[list[int]], n: int, k: int) -> int:
         graph = defaultdict(list)
         
         for source, destination, cost in times:
