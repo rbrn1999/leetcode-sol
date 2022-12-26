@@ -5,6 +5,21 @@ Greedy, bottom-up
 Time Complexity: O(n)
 Space Complexity: O(1)
 '''
+# update shorter solution (2022/12/26)
+class Solution:
+    def canJump(self, nums: list[int]) -> bool:
+        n = len(nums)
+        reach = 0
+        for i in range(n):
+            if reach < i:
+                return False
+            reach = max(reach, i + nums[i])
+            if reach >= n-1:
+                return True
+        
+        return True
+
+
 class Solution:
     def canJump(self, nums: list[int]) -> bool:
         i = 0
@@ -26,6 +41,13 @@ class Solution:
         return True
 
 '''
+Dynamic Programming, top-bottom
+Time Complexity: O(n)
+Space Complexity: O(1)
+link: https://youtu.be/Yan0cv2cLy8
+'''
+
+'''
 Dynamic Programming, bottom-up
 Time Complexity: O(n)
 Space Complexity: O(n)
@@ -43,10 +65,3 @@ class Solution:
             i += 1
         
         return True if dp[-1] == 1 else False
-
-'''
-Dynamic Programming, top-bottom
-Time Complexity: O(n)
-Space Complexity: O(1)
-link: https://youtu.be/Yan0cv2cLy8
-'''
