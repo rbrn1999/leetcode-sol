@@ -8,26 +8,17 @@ class TreeNode:
         self.right = right
 class Solution:
     def goodNodes(self, root: TreeNode) -> int:
-        result = 0
-
-        def dfs(path, node):
+        count = 0
+        def dfs(node, maxVal=float('-inf')):
             if node is None:
                 return
+            if node.val >= maxVal:
+                maxVal = node.val
+                nonlocal count
+                count += 1
+            
+            dfs(node.left, maxVal)
+            dfs(node.right, maxVal)
 
-            good = True
-            for parentVal in path:
-                if parentVal > node.val:
-                    good = False
-                    break
-
-            if good:
-                nonlocal result
-                result += 1
-
-            path.append(node.val)
-            dfs(path.copy(), node.left)
-            dfs(path.copy(), node.right)
-
-
-        dfs([], root)
-        return result
+        dfs(root)
+        return count
