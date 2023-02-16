@@ -8,8 +8,7 @@ class TreeNode:
         self.right = right
 class Solution:
     def maxDepth(self, root: Optional[TreeNode]) -> int:
-        def dfs(node, depth):
-            if node is None:
-                return 0
-            return 1 + max(dfs(node.left, depth), dfs(node.right, depth))
-        return dfs(root, 0)
+        if root is None:
+            return 0
+        else:
+            return max(self.maxDepth(root.left), self.maxDepth(root.right)) + 1
