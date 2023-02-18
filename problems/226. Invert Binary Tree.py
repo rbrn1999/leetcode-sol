@@ -8,11 +8,8 @@ class TreeNode:
         self.right = right
 class Solution:
     def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
-        def dfs(node) -> TreeNode:
-            if node is None:
-                return node
-            else:
-                node.right, node.left = dfs(node.left), dfs(node.right)
-                return node
+        if root is None:
+            return None
 
-        return dfs(root)
+        root.left, root.right = self.invertTree(root.right), self.invertTree(root.left)
+        return root
