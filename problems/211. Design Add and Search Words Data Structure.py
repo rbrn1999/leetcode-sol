@@ -1,35 +1,32 @@
 # link: https://leetcode.com/problems/design-add-and-search-words-data-structure/
 
 class TrieNode:
-    def __init__(self, isEnd=False):
-        self.isEnd = isEnd
-        self.children = {} # val: node
+    def __init__(self):
+        self.isEnd = False
+        self.children = {}
+
 class WordDictionary:
     def __init__(self):
-        self.root = TrieNode('')
-        
+        self.trie = TrieNode()
+
     def addWord(self, word: str) -> None:
-        node = self.root
+        node = self.trie
         for c in word:
-            if c not in node.children:
-                node.children[c] = TrieNode()
+            node.children.setdefault(c, TrieNode())
             node = node.children[c]
         node.isEnd = True
-    def search(self, word: str) -> bool:
-        def helper(word, node):
-            if word == "":
-                if node.isEnd:
-                    return True
-            elif word[0] == '.':
-                for child in node.children.values():
-                    if helper(word[1:], child):
-                        return True
+
+    def __search(self, word, node) -> bool:
+        for i in range(len(word)):
+            if word[i] == '.':
+                return any(self.__search(word[i+1:], child) for child in node.children.values())
+            if word[i] not in node.children:
                 return False
-            elif word[0] in node.children:
-                return helper(word[1:], node.children[word[0]])
-            return False
-            
-        return helper(word, self.root)
+            node = node.children[word[i]]
+        return node.isEnd
+
+    def search(self, word: str) -> bool:
+        return self.__search(word, self.trie)
 
 
 # Your WordDictionary object will be instantiated and called as such:
