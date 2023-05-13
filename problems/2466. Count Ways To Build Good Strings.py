@@ -1,14 +1,29 @@
-# link: https://leetcode.com/problems/count-ways-to-build-good-strings/
-
-from functools import cache
+# Bottom-Up
 class Solution:
     def countGoodStrings(self, low: int, high: int, zero: int, one: int) -> int:
-        @cache
-        def dfs(length):
-            if length == 0:
-                return 1
-            if length < 0:
-                return 0
-            return (dfs(length-one) + dfs(length-zero)) % int(1E9 + 7)
+        # low and high are 1-indexed
+        dp = [1] + [0] * high # dp[i]: combinations of [0~i)
+        for i in range(high+1):
+            if i + zero <= high:
+                dp[i+zero] = (dp[i+zero] + dp[i]) % (10**9 + 7)
+            if i + one <= high:
+                dp[i+one] = (dp[i+one] + dp[i]) % (10**9 + 7)
+                
+        # dp offset: +1, low-high offset: +1 -> cancelled out
+        return sum(dp[low:]) % (10**9 + 7)
+    
 
-        return sum([dfs(i) for i in range(low, high+1)]) % int(1E9 + 7)
+# Top-Down
+# from functools import cache
+# class Solution:
+#     def countGoodStrings(self, low: int, high: int, zero: int, one: int) -> int:
+#         @cache
+#         def dfs(i: int) -> int:
+#             if i > high:
+#                 return 0
+#             count = dfs(i+zero) + dfs(i+one)
+#             if i >= low:
+#                 count += 1
+#             return count % (10**9 + 7)
+        
+#         return dfs(0)
