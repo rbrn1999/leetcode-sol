@@ -1,27 +1,30 @@
 # link: https://leetcode.com/problems/shortest-path-in-binary-matrix/
-# solution reference: https://leetcode.com/problems/shortest-path-in-binary-matrix/discuss/312827/Python-Concise-BFS/744041
 
 from collections import deque
-
 class Solution:
-    def shortestPathBinaryMatrix(self, grid: List[List[int]]) -> int:
+    def shortestPathBinaryMatrix(self, grid: list[list[int]]) -> int:
         n = len(grid)
-        dirs = [[1,0], [-1,0], [0,1], [0,-1], [-1,-1], [1,1], [1,-1], [-1,1]]
-        if grid[0][0] or grid[n-1][n-1]:
+        if grid[0][0] == 1 or grid[n-1][n-1] == 1:
             return -1
-        
-        visited = set()
-        queue = deque([(0, 0, 1)]) # indice, distance
-        visited.add((0,0))
-        
-        while queue:
-            i, j, dist = queue.popleft()
-            if i == n-1 and j == n-1:
-                return dist
-            for d1, d2 in dirs:
-                x, y = i+d1, j+d2
-                if (0 <= x < n and 0 <= y < n) and ((x, y) not in visited) and grid[x][y] == 0:
-                    visited.add((x, y))
-                    queue.append((x, y, dist+1))
+
+        q = deque()
+        q.append((0, 0))
+        grid[0][0] = 1 # mark visited in place, could use a hash set instead
+        steps = 1
+
+        while q:
+            for _ in range(len(q)):
+                i, j = q.popleft()
+                if (i, j) == (n-1, n-1):
+                    return steps
+                for new_i in range(i-1, i+2):
+                    for new_j in range(j-1, j+2):
+                        if new_i < 0 or new_i >= n or new_j < 0 or new_j >= n or grid[new_i][new_j] == 1:
+                            continue
+                        q.append((new_i, new_j))
+                        grid[new_i][new_j] = 1
+
+            steps += 1
+            
         return -1
         
