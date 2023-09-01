@@ -2,11 +2,11 @@
 
 import math
 class Solution:
-    def countBits(self, n: int) -> List[int]:
+    def countBits(self, n: int) -> list[int]:
         if n == 0:
             return [0]
-        exp = math.ceil(math.log(n, 2))
+        exp = int(math.log(n, 2))
         res = [0]
-        for i in range(0, exp+1):
+        for _ in range(0, exp+1):
             res.extend([1+n for n in res])
         return res[:n+1]
