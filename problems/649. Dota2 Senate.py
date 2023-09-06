@@ -15,16 +15,16 @@ class Solution:
                 if c == 'R':
                     if ban_r > 0:
                         ban_r -= 1
-                        r -= 1
                     else:
                         ban_d += 1
+                        d -= 1
                         q.append(c)
                 else:
                     if ban_d > 0:
                         ban_d -= 1
-                        d -= 1
                     else:
                         ban_r += 1
+                        r -= 1
                         q.append(c)
         
         return "Dire" if d > 0 else "Radiant"
