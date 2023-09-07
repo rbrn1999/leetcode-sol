@@ -6,45 +6,50 @@ class TreeNode:
         self.left = None
         self.right = None
 
+
+# Time: O(n) 1 pass, Space: O(log(n))
 class Solution:
     def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
-        def dfs(root, path, target):
-            if root is None:
-                return None
-            if root is target:
-                return path+[root]
-            
-            if root.left:
-                path_candidate = dfs(root.left, path+[root], target)
-                if path_candidate:
-                    return path_candidate
-            if root.right:
-                return dfs(root.right, path+[root], target)
-            
-            return None
-        
-        
-        pa = dfs(root, [], p)
-        qa = dfs(root, [], q)
-        
-        # print([node.val for node in pa])
-        # print([node.val for node in qa])
-                
-        for i in pa[::-1]:
-            for j in qa[::-1]:
-                if i == j:
-                    return i
-        
-        return None
+        answer = root
 
-root = TreeNode(3)
-root.left = TreeNode(5)
-root.left.left = TreeNode(6)
-root.left.right = TreeNode(2)
-root.left.right.left = TreeNode(7)
-root.left.right.right = TreeNode(4)
-root.right = TreeNode(1)
-root.right.left = TreeNode(0)
-root.right.right = TreeNode(8)
+        def dfs(node):
+            if node is None:
+                return (0, None)
+            left, l_ans = dfs(node.left)
+            if l_ans:
+                return (2, l_ans)
+            right, r_ans = dfs(node.right)
+            if r_ans:
+                return (2, r_ans)
+            state = left + right + int(node==p or node==q)
+            if state == 2:
+                print(node.val)
+                return (state, node)
+            else:
+                return (state, None)
+        
+        return dfs(root)[1]
+    
+# Hash Map: Time: O(n) 4 passes, Space: O(n)
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        answer = root
 
-print(Solution().lowestCommonAncestor(root, root.left, root.right).val)
+        def dfs(node):
+            if node is None:
+                return (0, None)
+            left, l_ans = dfs(node.left)
+            if l_ans:
+                return (2, l_ans)
+            right, r_ans = dfs(node.right)
+            if r_ans:
+                return (2, r_ans)
+            state = left + right + int(node==p or node==q)
+            if state == 2:
+                print(node.val)
+                return (state, node)
+            else:
+                return (state, None)
+            
+        
+        return dfs(root)[1]
