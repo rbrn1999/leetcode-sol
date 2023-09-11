@@ -1,6 +1,7 @@
 # link: https://leetcode.com/problems/number-of-provinces/
 # explaination: https://leetcode.com/explore/featured/card/graph/618/disjoint-set/3846/
 
+# Union Find
 class Solution:
     def findCircleNum(self, isConnected: list[list[int]]) -> int:
         n = len(isConnected)
@@ -41,3 +42,25 @@ class Solution:
 
         return result
 
+# DFS
+class Solution:
+    def findCircleNum(self, isConnected: list[list[int]]) -> int:
+        n = len(isConnected)
+        visited = set()
+
+        def dfs(i):
+            if i in visited:
+                return 0
+            else:
+                visited.add(i)
+            for j in range(n):
+                if i != j and isConnected[i][j] == 1 and j not in visited:
+                    dfs(j)
+            
+            return 1
+        
+        count = 0
+        for i in range(n):
+            count += dfs(i)
+        
+        return count
