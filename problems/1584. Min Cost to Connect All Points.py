@@ -1,8 +1,6 @@
 # link: https://leetcode.com/problems/min-cost-to-connect-all-points/
 
 import heapq
-from collections import defaultdict
-
 # solution reference: https://leetcode.com/problems/min-cost-to-connect-all-points/discuss/843995/
 class Solution:
     def minCostConnectPoints(self, points: list[list[int]]) -> int:
