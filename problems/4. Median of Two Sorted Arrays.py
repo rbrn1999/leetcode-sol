@@ -1,7 +1,36 @@
 # link: https://leetcode.com/problems/median-of-two-sorted-arrays/
 
-# solution: https://leetcode.com/problems/median-of-two-sorted-arrays/solutions/2496/
+# O(log(min(m, n))) solution
 
+class Solution:
+    def findMedianSortedArrays(self, nums1: list[int], nums2: list[int]) -> float:
+        if len(nums1) > len(nums2):
+            nums1, nums2 = nums2, nums1
+        m, n = len(nums1), len(nums2)
+
+        left = 0
+        right = m
+
+        while left <= right:
+            ind1 = (left+right) // 2
+            ind2 = (m+n+1) // 2 - ind1
+
+            maxLeft1 = nums1[ind1-1] if ind1 > 0 else -float('inf')
+            minRight1 = nums1[ind1] if ind1 < m else float('inf')
+            maxLeft2 = nums2[ind2-1] if ind2 > 0 else -float('inf')
+            minRight2 = nums2[ind2] if ind2 < n else float('inf')
+
+            if maxLeft1 <= minRight2 and maxLeft2 <= minRight1:
+                if (m + n) % 2:
+                    return max(maxLeft1, maxLeft2)
+                else:
+                    return (max(maxLeft1, maxLeft2) + min(minRight1, minRight2)) / 2
+            elif maxLeft1 > minRight2:
+                right = ind1-1
+            else:
+                left = ind1 + 1
+
+# solution: https://leetcode.com/problems/median-of-two-sorted-arrays/solutions/2496/
 class Solution:
     def findMedianSortedArrays(self, nums1: list[int], nums2: list[int]) -> float:
         m, n = len(nums1), len(nums2)
