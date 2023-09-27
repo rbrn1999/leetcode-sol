@@ -1,26 +1,16 @@
 # link: https://leetcode.com/problems/partition-labels/
 class Solution:
     def partitionLabels(self, s: str): #-> List[int]:
-        
-        def singleLabel(start):
-            end = s.rindex(s[start])
-            
-            for index in range(end+1, len(s)):
-                if s[index] in s[start:end+1]:
-                    end = index
-
-            return end
+        last_occr = {}
+        for i, c in enumerate(s):
+            last_occr[c] = i
         
         partitions = []
-        tempStart = 0
+        l = r = 0
+        for i, c in enumerate(s):
+            r = max(r, last_occr[c])
+            if i == r:
+                partitions.append(r-l+1)
+                l = r = i + 1
         
-        while tempStart < len(s):
-            tempEnd = singleLabel(tempStart)
-            partitions.append(tempEnd - tempStart + 1)
-            print(f'start: {tempStart}, end: {tempEnd}')
-            print(s[tempStart:tempEnd+1])
-            tempStart = tempEnd+1
         return partitions
-
-sol = Solution()
-print(sol.partitionLabels("qiejxqfnqceocmy"))
