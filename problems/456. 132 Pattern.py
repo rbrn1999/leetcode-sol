@@ -1,5 +1,28 @@
 # link: https://leetcode.com/problems/132-pattern/
 
+
+# Approach 23/09/30
+class Solution:
+    def find132pattern(self, nums: list[int]) -> bool:
+        intervals = [[float('inf'), float('inf')]]
+        for num in nums:
+            if num < intervals[-1][0]:
+                if intervals[-1][0] == intervals[-1][1]:
+                    intervals[-1] = [num, num]
+                else:
+                    intervals.append([num, num])
+            elif num > intervals[-1][0]:
+                temp = [intervals[-1][0], num]
+                while intervals and num > intervals[-1][0]:
+                    first, second = intervals.pop()
+                    if num < second:
+                        return True
+                intervals.append(temp)
+            else:
+                pass
+        
+        return False
+    
 import math
 class Solution:
     def find132pattern(self, nums: list[int]) -> bool:
