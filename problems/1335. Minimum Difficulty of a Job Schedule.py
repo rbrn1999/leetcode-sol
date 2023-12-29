@@ -23,3 +23,20 @@ class Solution:
             return min(sameDay, nextDay)
 
         return helper(0, 0, d) if n >= d else -1
+
+# Bottom-Up (optimal space)
+from functools import cache
+class Solution:
+    def minDifficulty(self, jobDifficulty: list[int], d: int) -> int:
+        @cache
+        def helper(i: int, max_val: int, d: int) -> int:
+            if d < 0 or i < len(jobDifficulty) and d == 0:
+                return float('inf')
+            if i == len(jobDifficulty):
+                return 0 if d == 0 else float('inf')
+
+            max_val = max(max_val, jobDifficulty[i])
+            return min(helper(i+1, max_val, d), max_val + helper(i+1, -float('inf'), d-1))
+        
+        result = helper(0, -float('inf'), d)
+        return result if result < float('inf') else -1
