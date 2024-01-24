@@ -9,25 +9,21 @@ class TreeNode:
 
 class Solution:
     def pseudoPalindromicPaths (self, root: Optional[TreeNode]) -> int:
-        count = 0
-        def dfs(node, seen):
+        odd = [0] * 10
+        def dfs(node) -> int:
             if node is None:
-                return
+                return 0
 
-            if node.val in seen:
-                seen.remove(node.val)
-            else:
-                seen.add(node.val)
-
+            odd[node.val] = (odd[node.val] + 1) % 2
             if node.left is None and node.right is None:
-                if len(seen) <= 1:
-                    nonlocal count
-                    count += 1
-                return
-
-            dfs(node.left, seen.copy())
-            dfs(node.right, seen.copy())
-
-        dfs(root, set())
-        return count
-
+                count = sum(odd)
+                odd[node.val] = (odd[node.val] - 1) % 2
+                if count <= 1:
+                    return 1
+                else:
+                    return 0
+            result = dfs(node.left) + dfs(node.right)
+            odd[node.val] = (odd[node.val] - 1) % 2
+            return result
+        
+        return dfs(root)
