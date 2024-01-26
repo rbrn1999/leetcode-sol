@@ -1,29 +1,44 @@
 # link: https://leetcode.com/problems/out-of-boundary-paths/
 
+from functools import cache
+
+# DP
 class Solution:
     def findPaths(self, m: int, n: int, maxMove: int, startRow: int, startColumn: int) -> int:
-        count = 0
-        dp = [[0]*n for _ in range(m)]
+        dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        result = 0
+        dp = [[0] * n for _ in range(m)]
         dp[startRow][startColumn] = 1
 
         for _ in range(maxMove):
-            temp = [[0]*n for _ in range(m)]
-            for i in range(m):
-                for j in range(n):
-                    if i == m-1:
-                        count += dp[i][j]
-                    if j == n-1:
-                        count += dp[i][j]
-                    if i == 0:
-                        count += dp[i][j]
-                    if j == 0:
-                        count += dp[i][j]
+            next_dp = [[0] * n for _ in range(m)]
+            for row in range(m):
+                for col in range(n):
+                    for x, y in dirs:
+                        nr, nc = row + x, col + y
+                        if nr < 0 or nc < 0 or nr == m or nc == n:
+                            result = (result + dp[row][col]) % (10 ** 9 + 7)
+                        else:
+                            next_dp[nr][nc] = (next_dp[nr][nc] + dp[row][col]) % (10 ** 9 + 7)
 
-                    # count %= int(1E9+7) # may prevent possible overflow in other language
+            dp = next_dp
+        
+        return result
 
-                    temp[i][j] = ((dp[i-1][j] if i>0 else 0) + (dp[i+1][j] if i<m-1 else 0) + (dp[i][j-1] if j>0 else 0) + (dp[i][j+1] if j<n-1 else 0)) # % int(1E9 + 7)
-
-            dp = temp
-
-        return count % int(1E9 + 7)
-
+# Recursion + Memoization
+class Solution:
+    def findPaths(self, m: int, n: int, maxMove: int, startRow: int, startColumn: int) -> int:
+        dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        @cache
+        def dfs(row: int, col: int, moves: int) -> int:
+            if row < 0 or col < 0 or row >= m or col >= n:
+                return 1
+            if moves == 0:
+                return 0
+            count = 0
+            for x, y in dirs:
+                count = (count +  dfs(row + x, col + y, moves-1)) % (10 ** 9 + 7)
+            
+            return count
+        
+        return dfs(startRow, startColumn, maxMove)
