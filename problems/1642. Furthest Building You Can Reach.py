@@ -3,20 +3,17 @@
 import heapq
 class Solution:
     def furthestBuilding(self, heights: list[int], bricks: int, ladders: int) -> int:
-        diff = [heights[i]-heights[i-1] for i in range(1, len(heights))]
-        skips = diff[:ladders]
-        heapq.heapify(skips)
+        diff_maxHeap = []
 
-        for i in range(ladders+1, len(heights)):
-            if diff[i-1] < 0:
+        for i in range(1, len(heights)):
+            if heights[i] <= heights[i-1]:
                 continue
-                
-            if skips and skips[0]<diff[i-1]:
-                bricks -= max(heapq.heappushpop(skips, diff[i-1]), 0)
-            else:
-                bricks -= diff[i-1]
-            
+            bricks -= heights[i] - heights[i-1]
+            heapq.heappush(diff_maxHeap, -(heights[i] - heights[i-1]))
             if bricks < 0:
-                return i-1
-
-        return len(heights)-1
+                if ladders == 0:
+                    return i-1
+                bricks += -(heapq.heappop(diff_maxHeap))
+                ladders -= 1
+        
+        return len(heights) - 1
