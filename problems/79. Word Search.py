@@ -1,43 +1,34 @@
 # link: https://leetcode.com/problems/word-search/
 
 class Solution:
-    def exist(self, board: List[List[str]], word: str) -> bool:
+    def exist(self, board: list[list[str]], word: str) -> bool:
         m, n = len(board), len(board[0])
+        visited = set()
+        dirs = [(0, 1), (1, 0), (-1, 0), (0, -1)]
 
-        # won't pass LeetCode submission OJ without checking char count first ¯\_(ツ)_/¯
-        boardCount = {}
-        wordCount = {}
-        for i in range(m):
-            for j in range(n):
-                boardCount[board[i][j]] = boardCount.get(board[i][j], 0) + 1
-
-        for c in word:
-            wordCount[c] = wordCount.get(c, 0) + 1
-
-        for c in wordCount:
-            if wordCount.get(c, 0)> boardCount.get(c, 0):
-                return False
-
-
-        def search(row, col, i):
-            if row < 0 or col < 0 or row >= m or col >= n or board[row][col] == '_' or word[i] != board[row][col]:
-                return False
-
-            if i == len(word)-1:
+        def dfs(row, col, i):
+            if i == len(word):
                 return True
+            if row < 0 or col < 0 or row >= m or col >= n:
+                return False
+            if (row, col) in visited:
+                return False
+            if word[i] != board[row][col]:
+                return False
 
-            tmp, board[row][col] = board[row][col], '_'
+            visited.add((row, col))
+            for dx, dy in dirs:
+                if dfs(row+dx, col+dy, i+1):
+                    return True
+            visited.remove((row, col))
 
-            i += 1
-            found = search(row-1, col, i) or search(row+1, col, i) or search(row, col-1, i) or search(row, col+1, i)
+            return False
 
-            board[row][col] = tmp
-
-            return found
 
         for row in range(m):
             for col in range(n):
-                if search(row, col, 0):
+                visited = set()
+                if dfs(row, col, 0):
                     return True
-        return False
 
+        return False
