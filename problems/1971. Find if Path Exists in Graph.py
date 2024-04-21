@@ -1,26 +1,24 @@
 # link: https://leetcode.com/problems/find-if-path-exists-in-graph/description/
-
+from collections import defaultdict
 class Solution:
-    def validPath(self, n: int, edges: List[List[int]], source: int, destination: int) -> bool:
-        neighbors = defaultdict(set)
-        visited = set()
-
+    def validPath(self, n: int, edges: list[list[int]], source: int, destination: int) -> bool:
+        graph = defaultdict(list)
         for a, b in edges:
-            neighbors[a].add(b)
-            neighbors[b].add(a)
+            graph[a].append(b)
+            graph[b].append(a)
 
-        def dfs(node):
+        visited = set()
+        def dfs(node: int) -> bool:
+            if node in visited:
+                return False
+            else:
+                visited.add(node)
             if node == destination:
                 return True
-            for neighbor in neighbors[node]:
-                if neighbor in visited:
-                    continue
-                visited.add(neighbor)
-                neighbors[neighbor].remove(node)
-                if dfs(neighbor):
+            for n in graph[node]:
+                if dfs(n):
                     return True
+
             return False
 
-        visited.add(source)
         return dfs(source)
-
