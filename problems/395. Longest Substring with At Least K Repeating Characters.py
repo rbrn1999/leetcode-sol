@@ -30,3 +30,36 @@ class Solution:
                 substrings.append([new_l, r])
 
         return result
+
+# Sliding Window
+
+class Solution:
+    def longestSubstring(self, s: str, k: int) -> int:
+        result = 0
+        for uniqueCount in range(1, len(set(s)) + 1):
+            l, r = 0, 0
+            freq = {}
+            atLeastK = 0
+
+            while r < len(s):
+                if len(freq) <= uniqueCount: # try to expand window
+                    freq[s[r]] = freq.get(s[r], 0) + 1
+                    if freq[s[r]] == k:
+                        atLeastK += 1
+
+                    r += 1
+                else: # shrink window
+                    if freq[s[l]] == k:
+                        atLeastK -= 1
+
+                    freq[s[l]] -= 1
+                    if freq[s[l]] == 0:
+                        del freq[s[l]]
+
+                    l += 1
+
+                if atLeastK == uniqueCount and len(freq) == uniqueCount:
+                    result = max(result, r-l)
+
+
+        return result
