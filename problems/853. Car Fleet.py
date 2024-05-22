@@ -1,19 +1,17 @@
 # link: https://leetcode.com/problems/car-fleet/
 
 class Solution:
-    def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
-        n = len(position)
-        sorted_cars = sorted(list(range(n)), key=lambda i: position[i]) # sort car index by position
+    def carFleet(self, target: int, position: list[int], speed: list[int]) -> int:
+        pairs = sorted(zip(position, speed), reverse=True)
 
-        count = 0
-        prev_position, prev_speed = target, float('inf')
-        while sorted_cars:
-            index = sorted_cars.pop()
-            if speed[index] <= prev_speed or (prev_position-position[index])/(speed[index]-prev_speed) * prev_speed + prev_position > target:
-                print(index)
-                count += 1
-                prev_position, prev_speed = position[index], speed[index]
-            else:
-                pass
+        prevArriveTime = 0
+        fleets = 0
 
-        return count
+        for p, s in pairs:
+            time = (target - p) / s
+            if time > prevArriveTime: # does arrive at the same time or early than the previous fleet
+                # form a new fleet
+                fleets += 1
+                prevArriveTime = time
+        
+        return fleets
