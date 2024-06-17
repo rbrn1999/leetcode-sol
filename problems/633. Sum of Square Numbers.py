@@ -1,4 +1,6 @@
 # link: https://leetcode.com/problems/sum-of-square-numbers/
+
+# sqrt
 import math
 class Solution:
     def judgeSquareSum(self, c: int) -> bool:
@@ -9,6 +11,7 @@ class Solution:
 
         return False
 
+# 2-sum
 class Solution:
     def judgeSquareSum(self, c: int) -> bool:
         sqrt_c = int(math.sqrt(c))
