@@ -1,5 +1,22 @@
 # link: https://leetcode.com/problems/minimum-deletions-to-make-string-balanced/
 
+# Optimzed DP
+class Solution:
+    def minimumDeletions(self, s: str) -> int:
+        dp = [0, 0]
+        for c in s:
+            next_dp = [0, 0]
+            if c == 'a':
+                next_dp[0] = dp[0]
+                next_dp[1] = min(dp) + 1
+            else:
+                next_dp[0] = dp[0] + 1
+                next_dp[1] = min(dp)
+            dp = next_dp
+        
+        return min(dp)
+
+# Counting
 class Solution:
     def minimumDeletions(self, s: str) -> int:
         minCount = float('inf')
