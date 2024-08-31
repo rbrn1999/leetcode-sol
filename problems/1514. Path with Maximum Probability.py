@@ -8,8 +8,9 @@ class Solution:
 
         for i in range(len(edges)):
             a, b = edges[i]
-            graph[a].append((succProb[i], b))
-            graph[b].append((succProb[i], a))
+            if succProb[i] > 0.0:
+                graph[a].append((succProb[i], b))
+                graph[b].append((succProb[i], a))
 
         maxHeap =[(-1, start)]
         visited = set()
@@ -37,9 +38,10 @@ class Solution:
 #         for i in range(len(edges)):
 #             a, b = edges[i]
 #             prob = succProb[i]
-#             graph[a].append((b, prob))
-#             graph[b].append((a, prob))
-            
+# 		      if prob > 0.0:
+#               graph[a].append((b, prob))
+#               graph[b].append((a, prob))
+
 #         maxHeap = [(0, start)]
 #         visited = set([start])
 
