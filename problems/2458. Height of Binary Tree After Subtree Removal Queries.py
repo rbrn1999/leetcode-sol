@@ -44,7 +44,7 @@ class Solution:
     def treeQueries(self, root: Optional[TreeNode], queries: List[int]) -> List[int]:
         depths = {}
         heights = {}
-        top2Heights = defaultdict(lambda: [-1, -1]) # minimum hight of root is 0, so set default(null nodes) to -1
+        top2Heights = defaultdict(lambda: [-1, -1]) # minimum height of root is 0, so set default(null nodes) to -1
         def dfs(node, depth=0) -> int: # retrun height
             if node is None:
                 return -1
