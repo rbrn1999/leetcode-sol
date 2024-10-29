@@ -1,30 +1,30 @@
 # link: https://leetcode.com/problems/longest-square-streak-in-an-array/
 
-from collections import deque
 class Solution:
-    def longestSquareStreak(self, nums: List[int]) -> int:
-        nums.sort()
-        memo = deque()
-        result = -1
+    def longestSquareStreak(self, nums: list[int]) -> int:
+        num_set = set(nums)
+        max_streak = 0
         for num in nums:
-            insertFlag = False
-            for _ in range(len(memo)):
-                square, length = memo.popleft()
-                if square == num:
-                    memo.append([num ** 2, length + 1])
-                    insertFlag = True
-                    break
-                elif square > num:
-                    memo.appendleft([square, length])
-                    break
-                else:
-                    result = max(result, length)
+            streak = 1
+            while num * num in num_set:
+                streak += 1
+                num *= num
+            max_streak = max(max_streak, streak)
 
-            if not insertFlag:
-                memo.append([num ** 2, 1])
+        return max_streak if max_streak > 1 else -1
 
-        for _, length in memo:
-            result = max(result, length)
 
-        return result if result >= 2 else -1
+import math
+class Solution:
+    def longestSquareStreak(self, nums: list[int]) -> int:
+        num_streak = {}
+        nums = sorted(set(nums))
+        for num in nums:
+            temp = int(math.sqrt(num))
+            if temp * temp == num and temp in num_streak:
+               num_streak[num] = num_streak[temp] + 1
+            else:
+                num_streak[num] = 1
 
+        max_streak = max(num_streak.values())
+        return max_streak if max_streak > 1 else -1
