@@ -4,7 +4,8 @@ from collections import Counter
 class Solution:
     def takeCharacters(self, s: str, k: int) -> int:
         total_count = Counter(s)
-        for char in "abc":
+        chars = "abc"
+        for char in chars:
             total_count.setdefault(char, 0)
 
         if any(count < k for count in total_count.values()):
@@ -13,8 +14,8 @@ class Solution:
         limit = {c: total_count[c] - k for c in total_count} # max char allowed in the mid sliding window
         n = len(s)
 
-        result = float('inf')
-        char_count = defaultdict(lambda: 0)
+        result = len(s)
+        char_count = {c: 0 for c in chars}
         l = r = 0
 
         for r in range(n):
@@ -25,4 +26,3 @@ class Solution:
             result = min(result, n - (r-l+1))
 
         return result
-
